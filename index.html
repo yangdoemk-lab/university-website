@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UniGuide - มหาวิทยาลัยศิลปากร</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Sarabun', sans-serif; min-height: 100vh; overflow-x: hidden; background: #050f0a; }
+
+    /* ---- พื้นหลังสลับสีช้าๆ ---- */
+    .bg-wrap {
+      position: fixed; inset: 0; z-index: 0;
+      animation: bgShift 9s ease-in-out infinite;
+    }
+    @keyframes bgShift {
+      0% {
+        background:
+          radial-gradient(ellipse 80% 60% at 10% 20%, rgba(5,150,105,0.65) 0%, transparent 60%),
+          radial-gradient(ellipse 60% 50% at 90% 80%, rgba(16,185,129,0.55) 0%, transparent 60%),
+          radial-gradient(ellipse 50% 40% at 55% 40%, rgba(52,211,153,0.3) 0%, transparent 60%),
+          #050f0a;
+      }
+      33% {
+        background:
+          radial-gradient(ellipse 80% 60% at 10% 20%, rgba(6,100,180,0.65) 0%, transparent 60%),
+          radial-gradient(ellipse 60% 50% at 90% 80%, rgba(6,182,212,0.55) 0%, transparent 60%),
+          radial-gradient(ellipse 50% 40% at 55% 40%, rgba(56,189,248,0.3) 0%, transparent 60%),
+          #020a14;
+      }
+      66% {
+        background:
+          radial-gradient(ellipse 80% 60% at 10% 20%, rgba(161,120,0,0.65) 0%, transparent 60%),
+          radial-gradient(ellipse 60% 50% at 90% 80%, rgba(234,179,8,0.55) 0%, transparent 60%),
+          radial-gradient(ellipse 50% 40% at 55% 40%, rgba(250,204,21,0.3) 0%, transparent 60%),
+          #100e00;
+      }
+      100% {
+        background:
+          radial-gradient(ellipse 80% 60% at 10% 20%, rgba(5,150,105,0.65) 0%, transparent 60%),
+          radial-gradient(ellipse 60% 50% at 90% 80%, rgba(16,185,129,0.55) 0%, transparent 60%),
+          radial-gradient(ellipse 50% 40% at 55% 40%, rgba(52,211,153,0.3) 0%, transparent 60%),
+          #050f0a;
+      }
+    }
+
+    /* ---- วงกลมเบลอสลับสี ---- */
+    .orb { position: fixed; border-radius: 50%; filter: blur(90px); pointer-events: none; z-index: 0; }
+    .orb-1 { width: 520px; height: 520px; top: -140px; left: -100px; animation: drift 12s ease-in-out infinite alternate, orbColor1 9s ease-in-out infinite; }
+    .orb-2 { width: 440px; height: 440px; bottom: -110px; right: -90px; animation: drift2 10s ease-in-out infinite alternate, orbColor2 9s ease-in-out infinite; }
+    .orb-3 { width: 320px; height: 320px; top: 35%; right: 10%; animation: drift3 14s ease-in-out infinite alternate, orbColor3 9s ease-in-out infinite; }
+    .orb-4 { width: 220px; height: 220px; top: 60%; left: 20%; animation: drift 11s ease-in-out infinite alternate, orbColor1 9s ease-in-out infinite; animation-delay: -3s; }
+
+    @keyframes drift  { from { transform: translate(0,0) scale(1); } to { transform: translate(30px,20px) scale(1.08); } }
+    @keyframes drift2 { from { transform: translate(0,0) scale(1); } to { transform: translate(-20px,15px) scale(1.05); } }
+    @keyframes drift3 { from { transform: translate(0,0) scale(1); } to { transform: translate(15px,-25px) scale(1.1); } }
+
+    @keyframes orbColor1 {
+      0%   { background: rgba(16,185,129,0.5); }
+      33%  { background: rgba(6,100,180,0.5); }
+      66%  { background: rgba(202,138,4,0.5); }
+      100% { background: rgba(16,185,129,0.5); }
+    }
+    @keyframes orbColor2 {
+      0%   { background: rgba(52,211,153,0.4); }
+      33%  { background: rgba(6,182,212,0.4); }
+      66%  { background: rgba(250,204,21,0.4); }
+      100% { background: rgba(52,211,153,0.4); }
+    }
+    @keyframes orbColor3 {
+      0%   { background: rgba(5,150,105,0.35); }
+      33%  { background: rgba(56,189,248,0.35); }
+      66%  { background: rgba(161,120,0,0.35); }
+      100% { background: rgba(5,150,105,0.35); }
+    }
+
+    /* ---- Navbar ---- */
+    .glass-nav { background: rgba(255,255,255,0.05) !important; backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%); border-bottom: 1px solid rgba(255,255,255,0.12); }
+    .navbar-brand { color: #fff !important; font-size: 1.3rem; font-weight: 700; letter-spacing: 0.5px; }
+    .nav-link { color: rgba(255,255,255,0.75) !important; border-radius: 10px; padding: 7px 16px !important; transition: all 0.25s; font-size: 0.95rem; }
+    .nav-link:hover, .nav-link.active { color: #fff !important; background: rgba(255,255,255,0.14); }
+
+    /* ---- Hero ลดขนาดลงให้ carousel โผล่มาให้เห็น ---- */
+    .hero {
+      min-height: 60vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+      padding-top: 80px;
+    }
+    .hero-title { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 700; color: #fff; line-height: 1.2; margin-bottom: 12px; }
+    .hero-sub { color: rgba(255,255,255,0.6); font-size: 1rem; line-height: 1.7; margin-bottom: 28px; }
+    .btn-hero {
+      display: inline-block;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: #fff; border-radius: 50px;
+      padding: 11px 36px; font-size: 1rem;
+      font-family: 'Sarabun', sans-serif;
+      text-decoration: none; transition: all 0.3s;
+      backdrop-filter: blur(10px);
+    }
+    .btn-hero:hover { background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.5); color: #fff; transform: translateY(-2px); }
+
+    /* ---- Carousel ---- */
+    .carousel-wrap {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.14);
+      backdrop-filter: blur(24px) saturate(160%);
+      -webkit-backdrop-filter: blur(24px) saturate(160%);
+      border-radius: 28px; overflow: hidden; position: relative;
+    }
+    .carousel-wrap::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    }
+    .carousel-slide {
+      min-height: 300px; display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      padding: 40px 32px; text-align: center;
+    }
+    .slide-icon { font-size: 3.5rem; margin-bottom: 16px; filter: drop-shadow(0 0 20px rgba(255,255,255,0.2)); }
+    .slide-title { color: #fff; font-size: 1.5rem; font-weight: 700; margin-bottom: 10px; }
+    .slide-desc { color: rgba(255,255,255,0.6); font-size: 0.95rem; margin-bottom: 16px; max-width: 480px; }
+    .slide-tag {
+      display: inline-block;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.18);
+      color: rgba(255,255,255,0.85);
+      padding: 5px 14px; border-radius: 20px; font-size: 0.82rem; margin: 3px;
+    }
+    .carousel-indicators [data-bs-target] { width: 8px; height: 8px; border-radius: 50%; border: none; background: rgba(255,255,255,0.35); transition: all 0.3s; }
+    .carousel-indicators .active { background: #fff; transform: scale(1.3); }
+
+    /* ---- Stat Box ---- */
+    .stat-box {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.13);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border-radius: 20px; padding: 20px 16px; text-align: center;
+      transition: all 0.3s; position: relative; overflow: hidden;
+    }
+    .stat-box::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+    }
+    .stat-box:hover { background: rgba(255,255,255,0.1); transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,0.3); }
+    .stat-box h4 { color: #fff; font-weight: 700; font-size: 1.4rem; margin-bottom: 4px; }
+    .stat-box p { color: rgba(255,255,255,0.5); margin: 0; font-size: 0.82rem; }
+
+    .sec-title { color: #fff; font-weight: 700; text-align: center; margin-bottom: 20px; font-size: 1.3rem; }
+    footer { background: rgba(0,0,0,0.35); border-top: 1px solid rgba(255,255,255,0.08); color: rgba(255,255,255,0.4); text-align: center; padding: 20px; position: relative; z-index: 1; font-size: 0.9rem; }
+    .content-z { position: relative; z-index: 1; }
+  </style>
+</head>
+<body>
+
+  <div class="bg-wrap"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="orb orb-4"></div>
+
+  <nav class="navbar navbar-expand-lg glass-nav fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">🎓 UniGuide</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <div class="navbar-nav ms-auto">
+          <a class="nav-link active" href="index.html">หน้าแรก</a>
+          <a class="nav-link" href="faculty.html">คณะ</a>
+          <a class="nav-link" href="about.html">เกี่ยวกับ</a>
+          <a class="nav-link" href="contact.html">ติดต่อ</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero ลดสั้นลง carousel จะโผล่ให้เห็นบนหน้าจอ -->
+  <div class="hero">
+    <div class="container content-z text-center">
+      <p style="color:rgba(255,255,255,0.5);font-size:0.85rem;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px">มหาวิทยาลัยศิลปากร</p>
+      <h1 class="hero-title">ยินดีต้อนรับสู่ UniGuide SILPAKORN</h1>
+      <p class="hero-sub">รวมข้อมูลคณะและสาขาวิชา<br>วิทยาเขตพระราชวังสนามจันทร์ จังหวัดนครปฐม</p>
+      <a href="faculty.html" class="btn-hero">ดูคณะทั้งหมด →</a>
+    </div>
+  </div>
+
+  <div class="container pb-5 content-z">
+
+    <!-- Carousel -->
+    <p class="sec-title">✨ ตัวอย่างคณะ</p>
+    <div id="facultyCarousel" class="carousel slide carousel-wrap mb-4" data-bs-ride="carousel" data-bs-interval="3500">
+      <div class="carousel-indicators mb-2">
+        <button type="button" data-bs-target="#facultyCarousel" data-bs-slide-to="0" class="active"></button>
+        <button type="button" data-bs-target="#facultyCarousel" data-bs-slide-to="1"></button>
+        <button type="button" data-bs-target="#facultyCarousel" data-bs-slide-to="2"></button>
+      </div>
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <div class="carousel-slide">
+            <div class="slide-icon">💻</div>
+            <h3 class="slide-title">คณะเทคโนโลยีสารสนเทศและการสื่อสาร</h3>
+            <p class="slide-desc">พัฒนาผู้เชี่ยวชาญด้านเทคโนโลยีดิจิทัลและการสื่อสาร รองรับโลกยุคดิจิทัล</p>
+            <div>
+              <span class="slide-tag">เทคโนโลยีสารสนเทศเพื่อการออกแบบ</span>
+              <span class="slide-tag">เทคโนโลยีสารสนเทศธุรกิจ</span>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <div class="carousel-slide">
+            <div class="slide-icon">🔬</div>
+            <h3 class="slide-title">คณะวิทยาศาสตร์</h3>
+            <p class="slide-desc">ศึกษาพื้นฐานทางวิทยาศาสตร์ การทดลอง และการวิจัยเพื่อสร้างนวัตกรรม</p>
+            <div>
+              <span class="slide-tag">วิทยาการคอมพิวเตอร์</span>
+              <span class="slide-tag">เคมี</span>
+              <span class="slide-tag">ชีววิทยา</span>
+              <span class="slide-tag">ฟิสิกส์</span>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <div class="carousel-slide">
+            <div class="slide-icon">📊</div>
+            <h3 class="slide-title">คณะวิทยาการจัดการ</h3>
+            <p class="slide-desc">เรียนรู้ด้านธุรกิจ การบริหาร และการบริการในระดับสากล</p>
+            <div>
+              <span class="slide-tag">การตลาด</span>
+              <span class="slide-tag">การโรงแรม</span>
+              <span class="slide-tag">การท่องเที่ยว</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#facultyCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#facultyCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
+      </button>
+    </div>
+
+    <!-- Stats -->
+    <div class="row g-3 text-center">
+      <div class="col-6 col-md-3"><div class="stat-box"><h4>11</h4><p>คณะ</p></div></div>
+      <div class="col-6 col-md-3"><div class="stat-box"><h4>50+</h4><p>สาขาวิชา</p></div></div>
+      <div class="col-6 col-md-3"><div class="stat-box"><h4>นครปฐม</h4><p>วิทยาเขตพระราชวังสนามจันทร์</p></div></div>
+      <div class="col-6 col-md-3"><div class="stat-box"><h4>SU</h4><p>มหาวิทยาลัยศิลปากร</p></div></div>
+    </div>
+
+  </div>
+
+  <footer>กลุ่ม Teletubbies | คณะและสาขาใน มหาวิทยาลัยศิลปากร วิทยาเขตพระราชวังสนามจันทร์</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
